@@ -2,7 +2,7 @@
 
 Clone the Repository
 
-Create venv:
+Activate venv:
 
     .\venv\scripts\activate
 
