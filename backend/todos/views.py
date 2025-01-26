@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter
 from django.utils.timezone import now
+from django_filters import rest_framework as filters
+
+from .filters import TaskFilter
 from .models import Task
 from .serializers import TaskSerializer
 
@@ -13,7 +16,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [SearchFilter]
+    filter_backends = [filters.DjangoFilterBackend, SearchFilter]
+    filterset_class = TaskFilter 
     search_fields = ['title', 'description']
 
     def get_queryset(self):
