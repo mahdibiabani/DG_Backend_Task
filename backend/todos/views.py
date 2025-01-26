@@ -14,16 +14,14 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        # Ensure users can only access their own tasks
+        # Admins can see all tasks; regular users see only their tasks
+        if self.request.user.is_staff:
+            return Task.objects.all()
         return Task.objects.filter(user=self.request.user)
 
+
     def create(self, request, *args, **kwargs):
-        # Check if the user already has a task (enforce one-to-one relationship)
-        if Task.objects.filter(user=request.user).exists():
-            return Response(
-                {"detail": "You can only create one task at a time."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+       
 
         # Perform additional validations for `due_date`
         due_date = request.data.get("due_date")
@@ -39,9 +37,10 @@ class TaskViewSet(viewsets.ModelViewSet):
         serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
     def update(self, request, *args, **kwargs):
         # Prevent the user from changing the user field
-        if "user" in request.data:
+        if "user" in request.data and not request.user.is_staff:
             return Response(
                 {"detail": "You cannot change the user field."},
                 status=status.HTTP_400_BAD_REQUEST,
@@ -55,13 +54,13 @@ class TaskViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Proceed with updating the task
         return super().update(request, *args, **kwargs)
+
 
     def destroy(self, request, *args, **kwargs):
         # Prevent deletion of completed tasks
         task = self.get_object()
-        if task.completed:
+        if not request.user.is_staff and task.completed:
             return Response(
                 {"detail": "You cannot delete a completed task."},
                 status=status.HTTP_400_BAD_REQUEST,
