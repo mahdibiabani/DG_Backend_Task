@@ -19,6 +19,10 @@ Create a superuser to access the Django admin interface:
 
     python manage.py createsuperuser
 
+To run the tests, use the following command:
+
+    python manage.py test
+
 Run the Django development server:
 
     python manage.py runserver
