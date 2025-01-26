@@ -15,11 +15,16 @@
     python manage.py createsuperuser
 
 - Run the Django development server:
+
     python manage.py runserver
 
 - Once the server is running, you can access the following endpoints:
+
     Admin Panel: http://127.0.0.1:8000/admin/
+
     Todo API: http://127.0.0.1:8000/todos/
-    
+
+
 - You can access the documentation at the following URL:
+
     http://127.0.0.1:8000/swagger/
