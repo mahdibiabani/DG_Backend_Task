@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.filters import SearchFilter
 from django.utils.timezone import now
 from .models import Task
 from .serializers import TaskSerializer
@@ -12,6 +13,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [SearchFilter]
+    search_fields = ['title', 'description']
 
     def get_queryset(self):
         # Admins can see all tasks; regular users see only their tasks
