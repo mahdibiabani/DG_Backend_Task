@@ -41,7 +41,9 @@ INSTALLED_APPS = [
 
     'django_filters',
     'rest_framework',
+    'drf_yasg',
     'djoser',
+
     'core',
     'todos',
 ]
