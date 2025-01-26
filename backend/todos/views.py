@@ -46,13 +46,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
 
     def update(self, request, *args, **kwargs):
-        # Prevent the user from changing the user field
-        if "user" in request.data and not request.user.is_staff:
-            return Response(
-                {"detail": "You cannot change the user field."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
+        
         # Validate `due_date` if present
         due_date = request.data.get("due_date")
         if due_date and due_date < now().date().isoformat():

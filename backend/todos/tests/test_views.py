@@ -66,17 +66,6 @@ class TaskViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], 'Updated Task')
 
-    def test_update_task_change_user(self):
-        self.client.force_authenticate(user=self.user)
-        url = reverse('task-detail', args=[self.task.id])
-        data = {
-            'title': 'Updated Task',
-            'user': self.admin_user.id,
-            'due_date': (date.today() + timedelta(days=2)).isoformat()
-        }
-        response = self.client.put(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('You cannot change the user field.', response.data['detail'])
 
     def test_delete_task(self):
         self.client.force_authenticate(user=self.user)
